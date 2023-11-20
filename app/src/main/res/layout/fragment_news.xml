@@ -15,14 +15,17 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@color/white"
+
     tools:context=".Screens.ToDos.WatchNews.NewsFragment">
 <TextView
     android:id="@+id/tvTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="#ff0000"
+    android:textSize="28sp"
     android:textAlignment="center"
-    android:text="NEWS"/>
+    android:text="@string/News"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_main"
         android:layout_width="match_parent"

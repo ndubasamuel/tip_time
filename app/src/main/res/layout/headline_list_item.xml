@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                tools:text="Title"
                 android:textColor="@color/black"
                 android:maxLines="3">
 
@@ -38,7 +37,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="Title"
                 android:textColor="#9bc8c9"
                 android:layout_marginTop="6dp"
                 android:maxLines="1">
