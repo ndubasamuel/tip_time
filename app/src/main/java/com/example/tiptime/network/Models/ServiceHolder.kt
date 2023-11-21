@@ -8,20 +8,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ServiceHolder {
-
-
-    fun loggingInterceptor():HttpLoggingInterceptor
+    private fun loggingInterceptor():HttpLoggingInterceptor
     {
-        var logging = HttpLoggingInterceptor();
+        val logging = HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         return logging;
     }
-fun okHttp():OkHttpClient
-    {
-        val client: OkHttpClient = OkHttpClient.Builder()
+    private fun okHttp(): OkHttpClient {
+        return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor())
             .build()
-        return client
     }
 
 

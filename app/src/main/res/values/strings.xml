@@ -17,6 +17,6 @@
     <string name="reserve">Reserve</string>
     <string name="tip_time">Tip Time</string>
     <string name="news_button"><![CDATA[News & Current Events]]></string>
-    <string name="News">Prevailing News</string>
+    <string name="News">News</string>
 
 </resources>

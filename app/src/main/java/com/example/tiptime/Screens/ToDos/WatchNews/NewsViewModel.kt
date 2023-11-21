@@ -20,7 +20,7 @@ class NewsViewModel: ViewModel() {
 
         retrofit.getAllNews(
             "tesla",
-            "2023-10-20",
+            "2023-11-20",
             "publishedAt",
             "b3075ce86ddd47b2866543f66c7bc382")
             .enqueue(object : Callback<ApiResponse> {
