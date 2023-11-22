@@ -19,6 +19,12 @@ object ServiceHolder {
             .addInterceptor(loggingInterceptor())
             .build()
     }
+    private fun getPinnedOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .certificatePinner(SslPinning.getPinnedCertificate())
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .build()
+    }
 
 
     private val client = OkHttpClient.Builder().build()
@@ -26,6 +32,7 @@ object ServiceHolder {
         .baseUrl("https://newsapi.org/v2/")
         .addConverterFactory((GsonConverterFactory.create()))
         .client(okHttp())
+        .client(getPinnedOkHttpClient())
         .build()
 
 

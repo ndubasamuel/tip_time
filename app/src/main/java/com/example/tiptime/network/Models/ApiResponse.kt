@@ -8,23 +8,24 @@ final data class ApiResponse (
     @SerializedName("totalResults")
     var results: Int? = null,
 
-    val news: List<News> = listOf()
+    @SerializedName("articles")
+    var news: List<News>? = null
 )
 data class News(
-    @SerializedName("articles"      ) var source: Source = Source(),
-    @SerializedName("author"      ) var author: String? = "",
-    @SerializedName("title"       ) var title: String? = "",
-    @SerializedName("description" ) var description: String? = "",
-    @SerializedName("url"         ) var url: String? = "",
-    @SerializedName("urlToImage"  ) var urlToImage: String? = "",
-    @SerializedName("publishedAt" ) var publishedAt: String? = "",
-    @SerializedName("content"     ) var content: String? = ""
+    @SerializedName("source"      ) var source: Source,
+    @SerializedName("author"      ) var author: String?,
+    @SerializedName("title"       ) var title: String?,
+    @SerializedName("description" ) var description: String?,
+    @SerializedName("url"         ) var url: String?,
+    @SerializedName("urlToImage"  ) var urlToImage: String?,
+    @SerializedName("publishedAt" ) var publishedAt: String?,
+    @SerializedName("content"     ) var content: String?
 )
 
 data class Source(
 
-    @SerializedName("id"   ) var id   : String? = "",
-    @SerializedName("name" ) var name : String? = ""
+    @SerializedName("id"   ) var id   : String?,
+    @SerializedName("name" ) var name : String?
 
 )
 

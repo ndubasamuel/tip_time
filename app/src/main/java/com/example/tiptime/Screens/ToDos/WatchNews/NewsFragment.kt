@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,7 @@ import com.example.tiptime.databinding.FragmentNewsBinding
 import com.example.tiptime.network.Models.NewsAdapter
 
 
-class NewsFragment : Fragment() {
+class NewsFragment : Fragment()   {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NewsAdapter
@@ -29,6 +30,7 @@ class NewsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = NewsAdapter(ArrayList())
+        newsViewModel.fetchNews()
         recyclerView.adapter = adapter
 
         observeNews()
@@ -43,7 +45,6 @@ class NewsFragment : Fragment() {
             }
         }
 
-        newsViewModel.fetchNews()
     }
 }
 

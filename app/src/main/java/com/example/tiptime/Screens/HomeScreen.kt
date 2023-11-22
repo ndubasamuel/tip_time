@@ -30,7 +30,7 @@ class HomeScreen : Fragment() {
             tipButton.setOnClickListener{
                 findNavController().navigate(R.id.action_homeScreen_to_tip)
             }
-            newsButton.setOnClickListener{
+            newsButton.setOnClickListener {
                 findNavController().navigate(R.id.action_homeScreen_to_news)
             }
 

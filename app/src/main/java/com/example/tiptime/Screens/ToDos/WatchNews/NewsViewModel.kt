@@ -32,15 +32,14 @@ class NewsViewModel: ViewModel() {
                         _news.postValue(newsList)
                     }
                 } else {
-                    // Handle unsuccessful response
+                    // Handling unsuccessful response
                     _news.postValue(emptyList())
                     Log.e("API Error", "Response not successful: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                // Handle failure cases here
-                // You can post an empty list or handle the failure differently
+                // Handling failure cases here
                 _news.postValue(emptyList())
                 Log.e("API Error", "API call failed: ${t.message}")
             }
