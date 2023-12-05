@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tip Time</string>
+    <string name="service_cost">Jumuia</string>
+    <string name="how_the_service">Huduma Imekuwa Vipi?</string>
+    <string name="good">Vyema Mno (18%)</string>
+    <string name="amazing_20">Vyema Zaidi (20%)</string>
+    <string name="okay_15">Vyema (15%)</string>
+    <string name="round_up">"Jumuisha "</string>
+    <string name="tip_amount">Kidikezo</string>
+    <string name="calculate">Jumuisha</string>
+    <string name="home_text">Chukua Mda Wako</string>
+    <string name="head_title_news">YanayoJori</string>
+    <string name="news_clickable">Habari</string>
+    <string name="reserve">Hifadhi</string>
+    <string name="tip_time">Wakati Wa Kuokeza</string>
+    <string name="News">Habari</string>
+</resources>
