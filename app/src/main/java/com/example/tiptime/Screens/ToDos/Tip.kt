@@ -18,7 +18,7 @@ class Tip : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTipBinding.inflate(inflater, container, false)
         binding.calculateButton.setOnClickListener{calculateTip()}
         return binding.root

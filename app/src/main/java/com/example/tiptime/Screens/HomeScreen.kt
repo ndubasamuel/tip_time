@@ -1,22 +1,20 @@
 package com.example.tiptime.Screens
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.example.tiptime.R
-import com.example.tiptime.databinding.FragmentHomeScreenBinding
 import android.content.Context
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
-import androidx.core.app.ActivityCompat.recreate
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.language.bm.Lang
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.tiptime.MainActivity
+import com.example.tiptime.R
+import com.example.tiptime.ViewModel.NewsViewModel
+import com.example.tiptime.databinding.FragmentHomeScreenBinding
 import java.util.Locale
 
 class HomeScreen : Fragment() {
@@ -24,22 +22,24 @@ class HomeScreen : Fragment() {
     private lateinit var binding: FragmentHomeScreenBinding
     private lateinit var context: Context
     private lateinit var resources: Resources
+    private var i = 0
+    lateinit var viewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
         context = requireContext()
         resources = context.resources
 
-        // Your existing business logic
 
         binding.apply {
             tipButton.setOnClickListener {
@@ -47,7 +47,9 @@ class HomeScreen : Fragment() {
             }
             newsButton.setOnClickListener {
                 findNavController().navigate(R.id.action_homeScreen_to_news)
+
             }
+
             btnChangeLang.setOnClickListener {
                 showChangedLang()
             }
@@ -92,10 +94,4 @@ class HomeScreen : Fragment() {
 
         }
 
-        private fun loadLocate() {
-            val sharedPreferences: SharedPreferences =
-                context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
-            val language = sharedPreferences.getString("My_Lang", "")
-            setLocate(language ?: "")
-        }
 }

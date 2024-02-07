@@ -1,74 +1,90 @@
 package com.example.tiptime.Screens.ToDos.WatchNews
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.tiptime.R
+import com.example.tiptime.Adapters.NewsListAdapter
+import com.example.tiptime.MainActivity
+import com.example.tiptime.Utils.Resource
+import com.example.tiptime.ViewModel.NewsViewModel
 import com.example.tiptime.databinding.FragmentNewsBinding
-import com.example.tiptime.network.Models.NewsAdapter
 
 
-class NewsFragment : Fragment()   {
+class NewsFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: NewsAdapter
+    private lateinit var viewModel: NewsViewModel
+    private lateinit var adapter: NewsListAdapter
     private lateinit var binding: FragmentNewsBinding
-    private lateinit var progressBar: ProgressBar
 
-    private val newsViewModel: NewsViewModel by viewModels()
+    val TAG = "News Fragment"
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNewsBinding.inflate(inflater, container, false)
-        recyclerView = binding.recyclerMain
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = NewsAdapter(ArrayList())
-        newsViewModel.fetchNews()
-        recyclerView.adapter = adapter
-
-        progressBar = binding.determinateBar
-        progressBar.max = 100
-        observeLoadingState()
-
-        observeNews()
-        newsViewModel.fetchNews()
-
         return binding.root
+
+
     }
-    private fun observeLoadingState() {
-        newsViewModel.loading.observe(viewLifecycleOwner) {
-           isLoading ->
-            if (isLoading) {
-                progressBar.visibility = View.VISIBLE
-            } else {
-                progressBar.visibility = View.GONE
-                progressBar.progress = 0
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
+
+        setupRecyclerView()
+
+        viewModel.news.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let { newsResponse ->
+                        adapter.differ.submitList(newsResponse.articles)
+
+                    }
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let { message ->
+                        Log.e(TAG, "An error occurred: $message")
+
+                    }
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
             }
+
         }
     }
-
-    private fun observeNews() {
-        newsViewModel.news.observe(viewLifecycleOwner) { newsList ->
-            if (newsList != null) {
-                adapter.updateData(newsList)
-            }
-
-        }
-
+    private fun hideProgressBar() {
+       val progressBar = binding.newsProgressBar
+        progressBar.visibility = View.INVISIBLE
     }
+    private fun showProgressBar() {
+        val progressBar = binding.newsProgressBar
+        progressBar.visibility = View.VISIBLE
+    }
+    private fun setupRecyclerView() {
+        adapter = NewsListAdapter()
+        val recyclerView = binding.recyclerMain
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
 }
-
-
 
 
 

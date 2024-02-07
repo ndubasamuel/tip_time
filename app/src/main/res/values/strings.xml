@@ -16,7 +16,14 @@
     <string name="title" translatable="false"><![CDATA[manicure & pedicure parlor]]></string>
     <string name="reserve">Reserve</string>
     <string name="tip_time">Tip Time</string>
-    <string name="news_button" translatable="false"><![CDATA[News & Current Events]]></string>
+    <string name="news">News &amp; Current Events</string>
     <string name="News">News</string>
+    <string name="change_language" translatable="false">change language</string>
+    <string name="todo">TODO</string>
+    <string name="News_title">TITLE</string>
+    <string name="news_source">Source</string>
+    <string name="news_description">Description</string>
+    <string name="published_at">Published At</string>
+    <string name="news_content">Content</string>
 
 </resources>
