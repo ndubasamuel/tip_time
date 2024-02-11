@@ -11,27 +11,14 @@
     android:orientation="vertical"
     tools:context=".Screens.ToDos.WatchNews.NewsFragment">
 
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/newsProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleHorizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:progress="0"
-        android:minHeight="20dp"
-        android:minWidth="200dp"
-        android:max="100"
-        android:indeterminate="false"
-        />
+
 
 <TextView
     android:id="@+id/tvTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="#ff0000"
-    android:textSize="28sp"
+    android:textSize="15sp"
     android:textAlignment="center"
     android:text="@string/News"/>
 

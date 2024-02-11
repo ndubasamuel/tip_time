@@ -2,6 +2,7 @@ package com.example.tiptime.Model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName ="Articles")
 data class Article(
@@ -15,4 +16,6 @@ data class Article(
     val title: String,
     val url: String,
     val urlToImage: String
-)
+
+
+) : Serializable

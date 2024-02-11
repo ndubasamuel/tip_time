@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tiptime.Model.Article
 import io.reactivex.rxjava3.core.Flowable
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
@@ -15,9 +16,9 @@ interface NewsDao {
     fun upsert(article: Article?) : Long
 
     @Query("SELECT * FROM 'Articles'")
-    fun getAllNews() : Flowable<List<Article>>
+    fun getAllNews() :LiveData<List<Article>>
 
-    @Delete
+    @Delete()
     fun deleteAllNews(article: Article)
 
 }

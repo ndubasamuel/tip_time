@@ -39,7 +39,7 @@ class RetrofitInstance {
 //        return gsonBuilder.create()
 //    }
 //
-//    internal fun provideOkHttpClient(cache: Cache, application: Application): OkHttpClient {
+//    internal fun provideOkHttpClient(cache: Cache, application: NewsApplication): OkHttpClient {
 //        val interceptor = HttpLoggingInterceptor()
 //        interceptor.level = HttpLoggingInterceptor.Level.BODY
 //        return OkHttpClient.Builder()
@@ -69,7 +69,7 @@ class RetrofitInstance {
 
 //    @Provides
 //    @Singleton
-//    internal fun provideHttCache(application: Application): Cache {
+//    internal fun provideHttCache(application: NewsApplication): Cache {
 //        val cacheSize = 10 * 1024 * 1024
 //        return Cache(application.applicationContext.cacheDir, cacheSize.toLong())
 //    }

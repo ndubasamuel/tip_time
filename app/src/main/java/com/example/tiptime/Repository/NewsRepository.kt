@@ -1,104 +1,62 @@
 package com.example.tiptime.Repository
 
+import androidx.lifecycle.LiveData
+import androidx.room.Database
+import com.example.tiptime.API.NewsApi
 import com.example.tiptime.DB.RetrofitInstance
+import com.example.tiptime.DB.Room.NewsDao
 import com.example.tiptime.DB.Room.NewsDatabase
+import com.example.tiptime.Model.Article
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class NewsRepository(
-     val db: NewsDatabase) {
+//    val db: Database
+    val newsDao: NewsDao
+
+) {
 
 
    suspend fun getNews(countryCode: String, pageNumber: Int) =
         RetrofitInstance.api.getNews(countryCode, pageNumber)
 
+//    Updating database
+//    suspend fun upsert(article: Article) = db.getNewsDao().upsert(article)
+    suspend fun upsert(article: Article) {
+        withContext(Dispatchers.IO) {
+            newsDao.upsert(article)
+        }
+    }
+
+//    getting saved news from my database
+    fun getSavedNews(): LiveData<List<Article>> {
+        return newsDao.getAllNews()
+    }
+
+//    fun getSavedNews() = db.getNewsDao().getAllNews()
 
 }
 
 
-//    fun fetchNewsList(context: Context): Disposable {
-//        return Observable.fromCallable {
+
+//    private val compositeDisposable = CompositeDisposable()
+
+
+//    private val _newsListLiveData: MutableLiveData<<ArrayList<NewsData>>?> =
+//        repository.newsListLiveData
 //
-//            fetchNewsOffline()
+//    val newsListLiveData: MutableLiveData<BaseModel<ArrayList<NewsData>>?>
+//        get() = _newsListLiveData
 //
-//            if (!Utils.isNetworkAvailable(context)) {
-//                throw NetworkUnavailableException("Internet not Connected")
-//            }
-//            val response = newsApi.getPaymentTypes("in", API_KEY, 50)
-//
-//            if (response.isSuccessful) {
-//                insertNews(response.body()?.articles)
-//            } else {
-//                throw NetworkErrorException("Error loading data, Try again later")
-//            }
-//
-//            response.body()
-//
-//        }
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(Schedulers.io())
-//            .subscribe({ result ->
-//                newsListLiveData.postValue(result)
-//            },
-//                {
-//
-//                })
+//    fun fetchNewsList(context: Context) {
+//        compositeDisposable.add(repository.fetchNewsList(context))
 //
 //    }
-//
-//    class NetworkUnavailableException(message: String) : Exception(message)
-//
-//    @SuppressLint("CheckResult")
-//    private fun fetchNewsOffline() {
-//        Observable.fromCallable {
-//            newsDatabase.getNewsDao()
-//        }
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({ result ->
-//
-//                result.subscribe({ newsList ->
-//                    val newsArrayList = ArrayList(newsList)
-//                    val vewsDatabase = NewsApi("ok", "", newsArrayList)
-//                    newsListLiveData.postValue(dbData)
-//                }, {
-//
-//                    Log.e("news", "no news in flows")
-//
-//                })
-//            }, {
-//                Log.e("news", "no news in room")
-//            })
+//    override fun onCleared() {
+//        super.onCleared()
+//        compositeDisposable.clear()
 //    }
-//
-//        @SuppressLint("CheckResult")
-//        fun insertNews(newsList: ArrayList<NewsData>?) {
-//            Observable.fromCallable {
-//                var needsUpdate = false
-//                newsList?.forEach { item ->
-//                    val inserted = newsDao.insertNews(item)
-//                    if (inserted == -1L) {
-//                        val updated = newsDao.insertNews(item)
-//                        if (updated > 0) {
-//                            needsUpdate = true
-//
-//                        }
-//
-//                    } else {
-//                        needsUpdate = true
-//                    }
-//                }
-//                needsUpdate
-//            }
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe { needsUpdate ->
-//                    if (needsUpdate) {
-//                        fetchNewsOffline()
-//                    }
-//                }
-//        }
-//
-//}
 
 
 

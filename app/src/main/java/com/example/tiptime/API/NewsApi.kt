@@ -20,7 +20,7 @@ interface NewsApi {
     ): Response<NewsResponse>
 
     @GET("v2/everything")
-    fun searchForNews(
+    suspend fun searchForNews(
         @Query("q")searchQuery: String,
         @Query("apikey")
         apiKey: String = API_KEY,

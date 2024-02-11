@@ -20,10 +20,21 @@
         android:id="@+id/news"
         android:name="com.example.tiptime.Screens.ToDos.WatchNews.NewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_news_to_homeScreen"
+            app:destination="@id/homeScreen" />
+        <argument
+            android:name="article"
+            app:argType="com.example.tiptime.Model.Article" />
+    </fragment>
     <fragment
         android:id="@+id/tip"
         android:name="com.example.tiptime.Screens.ToDos.Tip"
         android:label="fragment_tip"
-        tools:layout="@layout/fragment_tip" />
+        tools:layout="@layout/fragment_tip" >
+        <action
+            android:id="@+id/action_tip_to_homeScreen"
+            app:destination="@id/homeScreen" />
+    </fragment>
 </navigation>
