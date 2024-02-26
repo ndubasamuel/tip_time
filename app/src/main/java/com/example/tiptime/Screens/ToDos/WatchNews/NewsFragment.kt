@@ -1,21 +1,32 @@
 package com.example.tiptime.Screens.ToDos.WatchNews
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tiptime.API.NewsApi
 import com.example.tiptime.Adapters.NewsListAdapter
+import com.example.tiptime.AppController
 import com.example.tiptime.MainActivity
+import com.example.tiptime.Model.Article
 import com.example.tiptime.Utils.Resource
 import com.example.tiptime.Utils.Utils
 import com.example.tiptime.ViewModel.NewsViewModel
+import com.example.tiptime.ViewModel.NewsViewModelFactory
+import com.example.tiptime.ViewModel.NewsViewModelFactory_Factory
+import com.example.tiptime.ViewModel.NewsViewModel_Factory
 import com.example.tiptime.databinding.FragmentNewsBinding
 import com.google.android.material.snackbar.Snackbar
+import javax.inject.Inject
 
 
 class NewsFragment : Fragment() {
@@ -23,6 +34,9 @@ class NewsFragment : Fragment() {
     private lateinit var viewModel: NewsViewModel
     private lateinit var adapter: NewsListAdapter
     private lateinit var binding: FragmentNewsBinding
+
+    @Inject
+    lateinit var viewModelFactory: NewsViewModelFactory
 
     val TAG = "News Fragment"
 
@@ -36,52 +50,58 @@ class NewsFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as MainActivity).viewModel
+        (requireActivity().application as AppController).mApiComponent.inject(this)
 
         setupRecyclerView()
 
-//        Observe article changes and save within room
-        viewModel.news.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(NewsViewModel::class.java)
+
+
+
+//        Observe saved article changes and display
+        viewModel.savedNews.observe(viewLifecycleOwner) { resource ->
+//        viewModel.news.observe(viewLifecycleOwner) {resource ->
+            when (resource) {
+                is Resource.Success<*> -> {
                     hideProgressBar()
-                    response.data?.let { newsResponse ->
+                    val articles = resource.data as List<Article>?
+                        articles.let {
 
-                        val firstArticle = newsResponse.articles.firstOrNull()
-
-                        firstArticle?.let {
-                            viewModel.saveArticle(it)
-                        }
-                        adapter.differ.submitList(newsResponse.articles)
+                        adapter.differ.submitList(it)
                     }
                 }
-                is Resource.Error -> {
+
+                is Resource.Error<*> -> {
                     hideProgressBar()
-                    response.message?.let { message ->
+                    resource.message?.let { message ->
                         Log.e(TAG, "An error occurred: $message")
+
+                        showSnackbar("Could not retrieve recent articles")
                     }
                 }
-                is Resource.Loading -> {
+                is Resource.Loading<*> -> {
                     showProgressBar()
+                }
+
+                else -> {
+//                    showSnackbar("Encountered an Error!")
+                    showSnackbar("Unexpected error: News Response is null")
                 }
             }
         }
 
 //      save and get saved articles
-        viewModel.savedArticles.observe(viewLifecycleOwner, Observer { article ->
+        viewModel.savedNews.observe(viewLifecycleOwner, Observer { article ->
             adapter.differ.submitList(article)
         })
-        if (Utils.isNetworkAvailable(requireContext())) {
-            viewModel.getNews("us")
-        } else {
-            showSnackbar("No internet connection. Displaying saved news")
-        }
+
+
+
     }
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT). show()
     }
-
-
 
     private fun hideProgressBar() {
        val progressBar = binding.newsProgressBar
@@ -104,6 +124,8 @@ class NewsFragment : Fragment() {
             )
         }
 }
+
+
 
 
 

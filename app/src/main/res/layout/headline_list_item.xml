@@ -1,38 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <data>-->
-    <!--        <variable-->
-    <!--            name="news"-->
-    <!--            type="com.example.tiptime.Model.Article" />-->
 
-    <!--        <import type="com.example.tiptime.Utils.Constants"/>-->
-
-    <!--    </data>-->
-
-    <androidx.cardview.widget.CardView
-
-        android:id="@+id/news_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        app:cardElevation="8dp">
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/newsProgressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleHorizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:progress="0"
-            android:minHeight="20dp"
-            android:minWidth="200dp"
-            android:max="100"
-            android:indeterminate="false"
-            />
 
         <LinearLayout
             android:id="@+id/layout_linear"
@@ -89,7 +62,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="170dp">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -151,5 +124,4 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</layout>
+</RelativeLayout>

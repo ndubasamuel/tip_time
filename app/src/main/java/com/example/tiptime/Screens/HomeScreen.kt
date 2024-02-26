@@ -23,7 +23,7 @@ class HomeScreen : Fragment() {
     private lateinit var context: Context
     private lateinit var resources: Resources
     private var i = 0
-    lateinit var viewModel: NewsViewModel
+//    lateinit var viewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +36,7 @@ class HomeScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as MainActivity).viewModel
+//        viewModel = (activity as MainActivity).viewModel
         context = requireContext()
         resources = context.resources
 

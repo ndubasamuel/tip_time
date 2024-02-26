@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.builtins.StandardNames.FqNames.set
+import org.jetbrains.kotlin.cli.jvm.main
+
 plugins {
     id ("com.android.application")
     id ("org.jetbrains.kotlin.android")
@@ -6,6 +9,20 @@ plugins {
 }
 
 android {
+
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("src/main/jniLibs")
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path("src/main/cpp/CMakeLists.txt")
+
+//            version = "3.22.1"
+        }
+    }
+
     namespace = "com.example.tiptime"
     compileSdk = 33
 
@@ -17,14 +34,20 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+//        val base64EncodedApiKey: Any = project.findProperty("BASE64_ENCODED_API_KEY") ?: ""
+//        buildConfigField("String", "BASE64_ENCODED_API_KEY", "\"${base64EncodedApiKey}\"")
     }
     buildFeatures {
         dataBinding = true
         viewBinding = true
     }
+        
+        
+
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -43,7 +66,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    var ndk = "26.2.11394342"
+    ndkVersion = ndk
+
+
 }
+
+
+
+
 
 dependencies {
 
@@ -51,11 +82,18 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("com.google.android.material:material:1.7.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+//    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     implementation("androidx.room:room-common:2.4.1")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+//    Shared preferences
+    implementation ("androidx.security:security-crypto:1.0.0-alpha02")
+
+//    jni
+//    implementation ("com.android.support:appcompat-v7:10.0.0")
 
 
     //navigation dependencies
@@ -94,8 +132,8 @@ dependencies {
 
 //    Image cache
     implementation ("com.github.bumptech.glide:glide:4.8.0")
-    annotationProcessor ("androidx.annotation:annotation:1.7.1")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.8.0")
+    kapt ("androidx.annotation:annotation:1.7.1")
+    kapt ("com.github.bumptech.glide:compiler:4.8.0")
 
 //    Dagger
     kapt ("com.google.dagger:dagger-compiler:2.48.1")
@@ -111,7 +149,7 @@ dependencies {
 //    Data Persistence
 //    implementation ("android.arch.persistence.room:runtime:1.1.0")
 //    kapt ("android.arch.persistence.room:compiler:1.0.0")
-    annotationProcessor ("android.arch.persistence.room:compiler:$rootProject.roomVersion")
+    kapt ("android.arch.persistence.room:compiler:$rootProject.roomVersion")
     implementation ("androidx.room:room-runtime:2.5.0")
     kapt ("androidx.room:room-compiler:2.5.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
@@ -124,14 +162,14 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
     implementation ("android.arch.persistence.room:runtime:1.1.1")
     implementation ("android.arch.persistence.room:rxjava2:1.1.1")
-    annotationProcessor ("android.arch.persistence.room:compiler:1.1.1")
-//    implementation("androidx.room:room-rxjava3:2.0.0")
+    kapt ("android.arch.persistence.room:compiler:1.1.1")
+    implementation("androidx.room:room-ktx:2.5.0")
     implementation ("androidx.room:room-rxjava3:2.3.0")
 
 
 //    glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    kapt ("com.github.bumptech.glide:compiler:4.12.0")
 
 //    RecyclerView
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
@@ -141,4 +179,4 @@ dependencies {
 
 }
 
-    
+

@@ -1,167 +1,118 @@
 package com.example.tiptime.ViewModel
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tiptime.API.NewsApi
 import com.example.tiptime.Model.Article
 import com.example.tiptime.Model.NewsResponse
 import com.example.tiptime.Repository.NewsRepository
 import com.example.tiptime.Utils.Resource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
 
-class NewsViewModel (private val repository: NewsRepository) : ViewModel() {
+class NewsViewModel @Inject constructor(private val repository: NewsRepository,
+                                        newsApi: NewsApi,
+    application: Application) : AndroidViewModel(application) {
 
 
-    val news: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val savedArticles: LiveData<List<Article>> = repository.getSavedNews()
-    private var topHeadlinesPage = 1
-
+//        val getNews: MutableLiveData<Response<NewsResponse>> = MutableLiveData()
+    val savedNews: LiveData<List<Article>> = repository.getSavedNews()
+//    private var pageNo = 1
 
     init {
         Log.d("NewsViewModel", "ViewModel Initialized")
-//        getNews("us")
-    }
+        getSavedNews()
 
-    fun getNews(countryCode: String) = viewModelScope.launch {
+
+
+    }
+    suspend fun getNews() = repository.getNews(countryCode =  "", pageNo = 1)
+
+
+
+    private fun getSavedNews() = viewModelScope.launch {
         try {
-            news.postValue(Resource.Loading())
+            Log.d("FETCHING NEWS", "Starting")
 
-            val response = withContext(Dispatchers.IO) {
-                repository.getNews(countryCode, topHeadlinesPage)
-            }
-            withContext(Dispatchers.Main) {
-                news.postValue(handleBreakingResponse(response))
-            }
-//            news.postValue(handleBreakingResponse(response))
+            getNews()
+            val savedNews = repository.getSavedNews()
 
+            savedNews.observeForever { articles ->
+                Log.d("SAVED NEWS", "Size: ${articles.size}")
+
+            }
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                news.postValue(Resource.Error(e.message ?: "Unknown Error"))
-            }
-
-    }
-
-
-
-//        val response = repository.getNews(countryCode, topHeadlinesPage)
-//        news.postValue(handleBreakingResponse(response))
-
-    }
-
-    private fun handleBreakingResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return Resource.Success(resultResponse)
-
-            }
+            Log.d("NEWS LOAD", "Failed to load Saved News")
         }
-        return Resource.Error(response.message())
+        return@launch
     }
-
-    fun saveArticle(article: Article) = viewModelScope.launch {
-        repository.upsert(article)
-    }
-//    fun getSavedNews() = repository.getSavedNews()
 
 }
 
-//    fun fetchNewsList(context: Context): Disposable {
-//        return Observable.fromCallable {
-//
-//            fetchNewsOffline()
-//
-//            if (!Utils.isNetworkAvailable(context)) {
-//                throw NetworkUnavailableException("Internet not Connected")
+
+//    }
+
+//    private fun handleBreakingResponse(response: Response<NewsResponse>) {
+//         if (response.isSuccessful) {
+//            response.body()?.let { resultResponse ->
+//                Resource.Success(resultResponse)
+//            } ?: run {
+//                Resource.Error("No Response")
 //            }
-//            val response = newsApi.getPaymentTypes("in", API_KEY, 50)
+//        } else {
 //
-//            if (response.isSuccessful) {
-//                insertNews(response.body()?.articles)
-//            } else {
-//                throw NetworkErrorException("Error loading data, Try again later")
-//            }
-//
-//            response.body()
-//
+//            handleHttpError(response.code())
 //        }
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(Schedulers.io())
-//            .subscribe({ result ->
-//                newsListLiveData.postValue(result)
-//            },
-//                {
+//    }
+// Handling Network failure
+//    private fun handleNoNetwork() {
+//        news.postValue(Resource.Error("No internet Connection, Check and try again"))
+//        loadSavedArticles()
+//    }
+
+//    private fun handleNetworkError() {
+//        news.postValue(Resource.Error("Cannot refresh, Network Error"))
+//        loadSavedArticles()
+//    }
+//    Handling Http Error
+//    private fun handleHttpError(errorCode: Int): Resource<NewsResponse> {
+//        val errorMessage = when (errorCode) {
+//            400 -> "Check your connection, Bad request"
+//            500 -> "Server Error"
+//            503 -> "Service Unavailable"
+//            401 -> "Unauthorized access"
+//            else -> "ERROR: $errorCode"
+//        }
 //
-//                })
+//        news.postValue(Resource.Error(errorMessage))
+//        return Resource.Error(errorMessage)
 //
 //    }
-//
-//    class NetworkUnavailableException(message: String) : Exception(message)
-//
-//    @SuppressLint("CheckResult")
-//    private fun fetchNewsOffline() {
-//        Observable.fromCallable {
-//            newsDatabase.getNewsDao()
-//        }
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({ result ->
-//
-//                result.subscribe({ newsList ->
-//                    val newsArrayList = ArrayList(newsList)
-//                    val vewsDatabase = NewsApi("ok", "", newsArrayList)
-//                    newsListLiveData.postValue(dbData)
-//                }, {
-//
-//                    Log.e("news", "no news in flows")
-//
-//                })
-//            }, {
-//                Log.e("news", "no news in room")
-//            })
-//    }
-//
-//        @SuppressLint("CheckResult")
-//        fun insertNews(newsList: ArrayList<NewsData>?) {
-//            Observable.fromCallable {
-//                var needsUpdate = false
-//                newsList?.forEach { item ->
-//                    val inserted = newsDao.insertNews(item)
-//                    if (inserted == -1L) {
-//                        val updated = newsDao.insertNews(item)
-//                        if (updated > 0) {
-//                            needsUpdate = true
-//
-//                        }
-//
-//                    } else {
-//                        needsUpdate = true
-//                    }
+
+//    private fun loadSavedArticles() {
+//        viewModelScope.launch {
+//            savedArticles.value?.let { savedArticlesList ->
+//                if (savedArticlesList.isNotEmpty()) {
+//                    news.postValue(Resource.Success(NewsResponse("ok", 1, savedArticlesList)))
+//                } else {
+//                    news.postValue(Resource.Error("No Saved News"))
 //                }
-//                needsUpdate
+//            } ?: run {
+//                news.postValue(Resource.Error("Error Loading Saved News"))
 //            }
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe { needsUpdate ->
-//                    if (needsUpdate) {
-//                        fetchNewsOffline()
-//                    }
-//                }
 //        }
+//
+//    }
+//    fun saveArticle(article: Article) = viewModelScope.launch {
+//        repository.upsert(article)
+//    }
 //
 //}
-
-
-
-
-
-
-
 
 
 

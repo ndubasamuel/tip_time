@@ -50,7 +50,7 @@ class NewsListAdapter :
             holder.textContent.text = article.content
             holder.textTitle.text = article.title
             holder.textPublishedAt.text  = article.publishedAt
-            holder.textSource.text = article.title
+            holder.textSource.text = article.source.name
             holder.textDescription.text = article.description
 
 
@@ -73,37 +73,5 @@ class NewsListAdapter :
 
 
     }
-
-
-//   inner class ViewHolder(
-//       private val binding: HeadlineListItemBinding, private val onItemClick: (String) -> Unit?
-//    ) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(data: Any) {
-//            binding.setVariable(BR.news, data)
-//            binding.executePendingBindings()
-//
-//            binding.newsContainer.setOnClickListener{
-//                onItemClick.invoke(binding.news?.url.toString())
-//            }
-//        }
-
-
-
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val binding: HeadlineListItemBinding =
-//            DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.headline_list_item, parent, false)
-//        return ViewHolder(binding, onItemClick)
-//
-//    }
-//    override fun getItemCount(): Int {
-//        return newsList.size
-//    }
-//
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(newsList.get(position))
-//    }
-
 
 }
