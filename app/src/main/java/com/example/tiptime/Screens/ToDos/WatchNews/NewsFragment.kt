@@ -57,44 +57,51 @@ class NewsFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(NewsViewModel::class.java)
 
+        viewModel.getNews()
 
 
 //        Observe saved article changes and display
-        viewModel.savedNews.observe(viewLifecycleOwner) { resource ->
-//        viewModel.news.observe(viewLifecycleOwner) {resource ->
-            when (resource) {
-                is Resource.Success<*> -> {
-                    hideProgressBar()
-                    val articles = resource.data as List<Article>?
+        viewModel.news.observe(viewLifecycleOwner) {
+
+            viewModel.news.observe(viewLifecycleOwner) { resource ->
+                when (resource) {
+                    is Resource.Success<*> -> {
+                        hideProgressBar()
+                        val articles = resource.data as List<Article>?
                         articles.let {
 
-                        adapter.differ.submitList(it)
+                            adapter.differ.submitList(it)
+                        }
                     }
-                }
 
-                is Resource.Error<*> -> {
-                    hideProgressBar()
-                    resource.message?.let { message ->
-                        Log.e(TAG, "An error occurred: $message")
+                    is Resource.Error<*> -> {
+                        hideProgressBar()
+                        resource.message?.let { message ->
+                            Log.e(TAG, "An error occurred: $message")
 
-                        showSnackbar("Could not retrieve recent articles")
+                            showSnackbar("Could not retrieve recent articles")
+                        }
                     }
-                }
-                is Resource.Loading<*> -> {
-                    showProgressBar()
-                }
 
-                else -> {
+                    is Resource.Loading<*> -> {
+                        showProgressBar()
+                    }
+
+                    else -> {
 //                    showSnackbar("Encountered an Error!")
-                    showSnackbar("Unexpected error: News Response is null")
+                        showSnackbar("Unexpected error: News Response is null")
+                    }
                 }
             }
         }
 
+
 //      save and get saved articles
-        viewModel.savedNews.observe(viewLifecycleOwner, Observer { article ->
-            adapter.differ.submitList(article)
+        viewModel.savedNews.observe(viewLifecycleOwner, Observer {
+            Log.i("FRAGMENT", "Recyclerview Loads")
+            adapter.differ.submitList(it)
         })
+
 
 
 

@@ -16,7 +16,7 @@ interface NewsApi {
         @Query("pageNumber")
         pageNumber: Int = 1,
         @Query("apiKey")
-        apiKey: String = ""
+        apiKey: String = "b3075ce86ddd47b2866543f66c7bc382"
 
 
 

@@ -7,12 +7,15 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tiptime.Model.Article
-import com.example.tiptime.Model.NewsResponse
 
+//typealias Article = List<Article>
 @Dao
 interface NewsDao {
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun upsert(article: Article?)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(article: Article?)
+    fun addArticles(article: Article)
 
     @Query("SELECT * FROM 'Articles'")
     fun getAllNews() : LiveData<List<Article>>

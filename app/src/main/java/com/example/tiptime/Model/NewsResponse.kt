@@ -3,6 +3,6 @@ package com.example.tiptime.Model
 data class NewsResponse(
     val status: String,
     val totalResults: Int,
-    val articles: List<Article>
+    var articles: List<Article>
 
 )

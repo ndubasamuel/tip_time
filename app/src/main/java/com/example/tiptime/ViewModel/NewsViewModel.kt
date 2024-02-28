@@ -10,49 +10,80 @@ import com.example.tiptime.API.NewsApi
 import com.example.tiptime.Model.Article
 import com.example.tiptime.Model.NewsResponse
 import com.example.tiptime.Repository.NewsRepository
-import com.example.tiptime.Utils.Resource
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
 import retrofit2.Response
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(private val repository: NewsRepository,
                                         newsApi: NewsApi,
     application: Application) : AndroidViewModel(application) {
+        private lateinit var article: Article
 
-
-//        val getNews: MutableLiveData<Response<NewsResponse>> = MutableLiveData()
     val savedNews: LiveData<List<Article>> = repository.getSavedNews()
-//    private var pageNo = 1
+
+        private var _news = MutableLiveData<Response<NewsResponse>>()
+    val news: LiveData<Response<NewsResponse>> =_news
+
 
     init {
         Log.d("NewsViewModel", "ViewModel Initialized")
-        getSavedNews()
 
-
+//        getNews("us", 1)
 
     }
-    suspend fun getNews() = repository.getNews(countryCode =  "", pageNo = 1)
-
-
-
-    private fun getSavedNews() = viewModelScope.launch {
+    fun getNews() = viewModelScope.launch {
         try {
-            Log.d("FETCHING NEWS", "Starting")
+            Log.d("NewsViewModel", "Initializing Get News Method")
+            repository.getNews("", 1 ).let { response ->
+                _news.postValue(response)
 
-            getNews()
-            val savedNews = repository.getSavedNews()
+                if (response.isSuccessful) {
+                    response.body().let { NewsResponse ->
+//                        repository.addArticles(article)
+                        viewModelScope.launch {
 
-            savedNews.observeForever { articles ->
-                Log.d("SAVED NEWS", "Size: ${articles.size}")
+                           Log.d("NewsViewModel", "Success")
+                            repository.addArticles(article)
+                        }
+                    }
 
+                }
             }
-        } catch (e: Exception) {
-            Log.d("NEWS LOAD", "Failed to load Saved News")
+        } catch (e: Exception){
+            Log.e("NewsViewModel", "Get News fails")
         }
-        return@launch
     }
 
-}
+    }
+
+
+
+//    private fun savedNews() = viewModelScope.launch {
+//        try {
+//            Log.d("FETCHING NEWS", "Starting")
+//            repository.getSavedNews().observeForever {
+//                _news.value?.articles = it
+//            }
+////            repository.getNews("us", 1).body()
+//
+//
+//            Log.i("NewsViewModel", _news.value?.articles.toString())
+//
+////            getNews()
+////            val savedNews = repository.getSavedNews()
+//
+////            savedNews.observeForever { articles ->
+////                Log.d("SAVED NEWS", "Size: ${articles.size}")
+////
+////            }
+//        } catch (e: Exception) {
+//            Log.d("NEWS LOAD", "Failed to load Saved News")
+//        }
+//        return@launch
+//    }
+//
+//}
 
 
 //    }

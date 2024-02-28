@@ -32,9 +32,7 @@ class RetrofitInstance @Inject constructor(private val context: Context) {
     private val apiKey = getApiFromNative()
     private val baseUrl = getBaseUrlFromNative()
 //    private val baseUrl = "https://newsapi.org/"
-
-
-
+//    private val apiKey = "b3075ce86ddd47b2866543f66c7bc382"
         @Provides
     @Singleton
     internal fun provideHttCache(application: Application): Cache {
