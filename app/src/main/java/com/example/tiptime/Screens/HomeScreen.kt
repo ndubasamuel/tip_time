@@ -6,24 +6,27 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.tiptime.MainActivity
 import com.example.tiptime.R
+import com.example.tiptime.Utils.Utils
 import com.example.tiptime.ViewModel.NewsViewModel
 import com.example.tiptime.databinding.FragmentHomeScreenBinding
 import java.util.Locale
 
 class HomeScreen : Fragment() {
 
+//    private lateinit var viewModel: NewsViewModel
     private lateinit var binding: FragmentHomeScreenBinding
     private lateinit var context: Context
     private lateinit var resources: Resources
     private var i = 0
-    lateinit var viewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +39,9 @@ class HomeScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as MainActivity).viewModel
         context = requireContext()
         resources = context.resources
+//        viewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
 
 
         binding.apply {
@@ -46,8 +49,8 @@ class HomeScreen : Fragment() {
                 findNavController().navigate(R.id.action_homeScreen_to_tip)
             }
             newsButton.setOnClickListener {
+//                viewModel.fetchNews()
                 findNavController().navigate(R.id.action_homeScreen_to_news)
-
             }
 
             btnChangeLang.setOnClickListener {

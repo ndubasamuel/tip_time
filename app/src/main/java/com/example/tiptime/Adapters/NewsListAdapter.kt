@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.tiptime.Model.Article
 import com.example.tiptime.R
+import com.squareup.picasso.Picasso
 
 class NewsListAdapter :
     RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
@@ -54,10 +55,10 @@ class NewsListAdapter :
             holder.textDescription.text = article.description
 
 
-            Glide.with(holder.itemView)
+            Picasso.get()
                 .load(article.urlToImage)
                 .placeholder(R.drawable.not_available)
-                .transition(DrawableTransitionOptions.withCrossFade())
+//                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.imageHeadlines)
         }
     }

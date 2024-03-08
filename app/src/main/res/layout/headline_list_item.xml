@@ -1,155 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <data>-->
-    <!--        <variable-->
-    <!--            name="news"-->
-    <!--            type="com.example.tiptime.Model.Article" />-->
 
-    <!--        <import type="com.example.tiptime.Utils.Constants"/>-->
 
-    <!--    </data>-->
-
-    <androidx.cardview.widget.CardView
-
-        android:id="@+id/news_container"
+    <LinearLayout
+        android:id="@+id/layout_linear"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        app:cardElevation="8dp">
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/newsProgressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleHorizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:progress="0"
-            android:minHeight="20dp"
-            android:minWidth="200dp"
-            android:max="100"
-            android:indeterminate="false"
-            />
+        android:layout_height="150dp"
+        android:layout_margin="6dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <LinearLayout
-            android:id="@+id/layout_linear"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_margin="6dp"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="10"
-                    android:text="@string/News_title"
-                    android:textAllCaps="true"
-                    android:textColor="#00d5ff"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                android:maxLines="10"
+                android:text="@string/News_title"
+                android:textAllCaps="true"
+                android:textColor="#00d5ff"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_source"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:maxLines="3"
-                    android:text="@string/news_source"
-                    android:textColor="#9bc8c9"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_headline"
-                android:layout_width="100dp"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_source"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="@string/todo"
-                android:scaleType="centerCrop"
-                android:src="@drawable/not_available" />
+                android:layout_marginTop="6dp"
+                android:maxLines="3"
+                android:text="@string/news_source"
+                android:textColor="#9bc8c9"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_headline"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/todo"
+            android:scaleType="centerCrop"
+            android:src="@drawable/not_available" />
+
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_author"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="170dp">
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Author"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_author"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_title1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/news_description"
+            android:textColor="#87b8ea"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_author" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_publishedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/published_at"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_title1" />
+
+        <ScrollView
+            android:id="@+id/scrollable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_publishedAt">
+
+            <TextView
+                android:id="@+id/text_content"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="match_parent"
+                android:text="@string/news_content"
+                android:textSize="22sp"
                 android:gravity="center"
-                android:text="Author"
-                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/scrollable" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_title1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="@string/news_description"
-                android:textColor="#87b8ea"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_author" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_publishedAt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/published_at"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title1" />
-
-            <ScrollView
-                android:id="@+id/scrollable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_publishedAt">
-
-                <TextView
-                    android:id="@+id/text_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/news_content"
-                    android:textSize="22sp"
-                    android:gravity="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/scrollable" />
-
-            </ScrollView>
+        </ScrollView>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</layout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

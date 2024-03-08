@@ -1,62 +1,110 @@
 package com.example.tiptime.Repository
 
-import androidx.lifecycle.LiveData
-import androidx.room.Database
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
+import android.util.Log
+import androidx.room.util.newStringBuilder
 import com.example.tiptime.API.NewsApi
 import com.example.tiptime.DB.RetrofitInstance
 import com.example.tiptime.DB.Room.NewsDao
-import com.example.tiptime.DB.Room.NewsDatabase
 import com.example.tiptime.Model.Article
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.tiptime.Model.NewsResponse
+import com.example.tiptime.Utils.Resource
+import com.example.tiptime.Utils.Utils
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observable.merge
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.internal.operators.observable.ObservableObserveOn
+import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.newSingleThreadContext
+import javax.inject.Inject
 
 
-class NewsRepository(
-//    val db: Database
-    val newsDao: NewsDao
+class NewsRepository @Inject constructor(
+    private val newsDao: NewsDao,
+    private val newsApi: NewsApi,
+    private val context: Context
+    ) {
 
-) {
+    @SuppressLint("CheckResult")
+    fun getLiveNews() : Observable<List<Article>> {
+        Log.d("Repository", "Fetching News")
+        val apiNews = getApiNews()
+
+            .flatMap { newsResponse ->
+                val articles = newsResponse.articles
+                Observable.just(articles)
+            }
+            .onErrorResumeNext { throwable: Throwable ->
+                Log.e("Repository", "Api call failed: ${throwable.message}}")
+
+                Observable.empty()
+            }
+            val roomNews = getRoomNews()
+        return merge(apiNews, roomNews)
 
 
-   suspend fun getNews(countryCode: String, pageNumber: Int) =
-        RetrofitInstance.api.getNews(countryCode, pageNumber)
-
-//    Updating database
-//    suspend fun upsert(article: Article) = db.getNewsDao().upsert(article)
-    suspend fun upsert(article: Article) {
-        withContext(Dispatchers.IO) {
-            newsDao.upsert(article)
-        }
     }
 
-//    getting saved news from my database
-    fun getSavedNews(): LiveData<List<Article>> {
-        return newsDao.getAllNews()
+     fun getApiNews(): Observable<NewsResponse> {
+        Log.d("Repository", "Api Call")
+        return newsApi.getNews()
+            .doOnError { error ->
+                Log.e("Repository", "News Error")
+            }
+            .doOnNext { newsResponse ->
+                Log.d("Repository", "Api Response: $newsResponse")
+                if (newsResponse.articles.isNotEmpty()) {
+                    Log.e("News Repo ", "We got news on our API")
+                    storeNewsInDb(newsResponse.articles)
+                } else {
+                    Log.e("News Repo", "No articles from API")
+                }
+            }
+            .subscribeOn(Schedulers.io())
     }
 
-//    fun getSavedNews() = db.getNewsDao().getAllNews()
+    fun getRoomNews() : Observable<List<Article>> {
+        Log.d("Repository", "Room  Call")
+       return try {
+//           if (!Utils.isNetworkAvailable(context)) {
+               newsDao.getAllNews()
+                   .filter() { it.isNotEmpty() }
+                   .toObservable()
+                   .doOnNext {
+                       Log.e("News Repo ${it.size}", "We got news in room")
+                   }
+//           } else {
+//               Observable.switchOnNext() {
+//                   getApiNews()
+//               }
+
+//           }
+       }catch (e: Exception) {
+           Log.e("News Repo", "Network Exceptions $newsDao")
+           Observable.error(e)
+       }
+    }
+
+    @SuppressLint("CheckResult")
+    fun storeNewsInDb(article: List<Article>) {
+        Log.d("Repository", "Storing news in DB: ${article.size} articles")
+        Completable.fromCallable { newsDao.upsert(article) }
+            .subscribeOn(Schedulers.io())
+
+            .subscribe(
+                { Log.i("News Repo", "data successful")
+            },
+        { error -> Log.e("News Repo", "Error storing data", error) }
+    )
+    }
 
 }
 
-
-
-//    private val compositeDisposable = CompositeDisposable()
-
-
-//    private val _newsListLiveData: MutableLiveData<<ArrayList<NewsData>>?> =
-//        repository.newsListLiveData
-//
-//    val newsListLiveData: MutableLiveData<BaseModel<ArrayList<NewsData>>?>
-//        get() = _newsListLiveData
-//
-//    fun fetchNewsList(context: Context) {
-//        compositeDisposable.add(repository.fetchNewsList(context))
-//
-//    }
-//    override fun onCleared() {
-//        super.onCleared()
-//        compositeDisposable.clear()
-//    }
 
 
 
