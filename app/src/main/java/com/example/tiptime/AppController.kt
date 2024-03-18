@@ -8,6 +8,7 @@ import com.example.tiptime.di.ApiComponent
 import com.example.tiptime.di.AppModule
 import com.example.tiptime.di.DaggerApiComponent
 import com.example.tiptime.di.DbModule
+import dagger.Provides
 import dagger.android.AndroidInjection.inject
 import javax.inject.Qualifier
 
@@ -22,7 +23,7 @@ class AppController: Application() {
 
          mApiComponent = DaggerApiComponent.builder()
              .application(this)
-             .retrofitInstance(RetrofitInstance(applicationContext))
+             .retrofitInstance(RetrofitInstance())
              .dbModule(DbModule(this))
              .build()
              .apply {

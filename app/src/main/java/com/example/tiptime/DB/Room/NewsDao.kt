@@ -11,14 +11,12 @@ import com.example.tiptime.Model.Article
 //typealias Article = List<Article>
 @Dao
 interface NewsDao {
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun upsert(article: Article?)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addArticles(article: Article)
+    suspend fun upsert(article: List<Article>?)
+
 
     @Query("SELECT * FROM 'Articles'")
-    fun getAllNews() : LiveData<List<Article>>
+    fun getAllNews() : List<Article>
 
     @Delete()
     fun deleteAllNews(article: Article?)

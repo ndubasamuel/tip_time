@@ -7,7 +7,7 @@ JNIEXPORT jstring JNICALL
 Java_com_example_tiptime_DB_RetrofitInstance_getBaseUrlFromNative(JNIEnv *env, jobject thiz) {
 
 //    converting Url to java and returning the Url
-    std::string baseUrl = "https://newsapi.org";
+    std::string baseUrl = "https://newsapi.org/";
     return env->NewStringUTF(baseUrl.c_str());
 
 }

@@ -21,18 +21,19 @@ import javax.inject.Singleton
 
 
 @Module
-class RetrofitInstance @Inject constructor(private val context: Context) {
+class RetrofitInstance () {
     private external fun getBaseUrlFromNative(): String
-    private external fun getApiFromNative(): String
+   private external fun getApiFromNative(): String
     init {
 
         System.loadLibrary("native-lib")
 
     }
-    private val apiKey = getApiFromNative()
+     val apiKey = getApiFromNative()
     private val baseUrl = getBaseUrlFromNative()
+//    val apiKey = "b3075ce86ddd47b2866543f66c7bc382"
 //    private val baseUrl = "https://newsapi.org/"
-//    private val apiKey = "b3075ce86ddd47b2866543f66c7bc382"
+
         @Provides
     @Singleton
     internal fun provideHttCache(application: Application): Cache {

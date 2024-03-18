@@ -1,6 +1,7 @@
 package com.example.tiptime.API
 
 import androidx.lifecycle.LiveData
+import com.example.tiptime.DB.RetrofitInstance
 import com.example.tiptime.Model.NewsResponse
 import com.example.tiptime.Utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -12,11 +13,13 @@ interface NewsApi {
     @GET("v2/top-headlines")
    suspend fun getNews(
         @Query("country")
-        searchQuery: String = "us",
-        @Query("pageNumber")
-        pageNumber: Int = 1,
+        country: String = "us",
+        @Query("category")
+        category: String = "entertainment",
+        @Query("pageSize")
+        pageNumber: Int = 30,
         @Query("apiKey")
-        apiKey: String = "b3075ce86ddd47b2866543f66c7bc382"
+        apiKey: String = RetrofitInstance().apiKey
 
 
 

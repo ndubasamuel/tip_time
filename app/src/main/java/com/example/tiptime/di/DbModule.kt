@@ -10,7 +10,10 @@ import javax.inject.Singleton
 
 @Module(includes = [AppModule::class])
 class DbModule (mApplication: Application){
-    private val newsDatabase: NewsDatabase = Room.databaseBuilder(mApplication, NewsDatabase::class.java, "news_db.db").build()
+    private val newsDatabase: NewsDatabase = Room.databaseBuilder(mApplication, NewsDatabase::class.java, "news_db.db")
+        .fallbackToDestructiveMigration()
+        .allowMainThreadQueries()
+        .build()
     @Singleton
     @Provides
     internal fun providesRoomDatabase(): NewsDatabase {

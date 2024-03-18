@@ -10,7 +10,7 @@ import com.example.tiptime.Model.Article
 
 
 @TypeConverters(DataConverter::class)
-@Database(entities = [Article::class], version = 1, exportSchema = false)
+@Database(entities = [Article::class], version = 2, exportSchema = false)
 abstract class NewsDatabase: RoomDatabase(){
 
     abstract fun getNewsDao(): NewsDao
@@ -27,6 +27,9 @@ abstract class NewsDatabase: RoomDatabase(){
                 context.applicationContext,
                 NewsDatabase::class.java,
                 "news_db.db"
-            ).build()
+            )
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
     }
 }

@@ -10,16 +10,12 @@ import dagger.Module
 import javax.inject.Inject
 
 @Module
-class NewsViewModelFactory @Inject constructor(
-    private val application: Application,
-    private val newsApi: NewsApi
-) : ViewModelProvider.Factory {
+class NewsViewModelFactory @Inject constructor(val repository: NewsRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NewsViewModel::class.java)) {
-            val newsDao = NewsDatabase.invoke(application.applicationContext).getNewsDao()
-            val repository = NewsRepository(newsDao, application, newsApi)
+//            val repository = NewsRepository(application)
             @Suppress("UNCHECKED_CAST")
-            return NewsViewModel(repository, newsApi, application) as T
+            return NewsViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

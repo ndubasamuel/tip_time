@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 class Utils {
     companion object {
         fun isNetworkAvailable(context: Context?): Boolean {
-//fun isNetworkAvailable(application: Application?): Boolean {
+//        fun isNetworkAvailable(application: Application?): Boolean {
             if (context == null) {
                 return false
             }
@@ -19,17 +19,15 @@ class Utils {
             val connectivityManager =
                 context.getSystemService(Application.CONNECTIVITY_SERVICE) as ConnectivityManager?
 
-            return if (connectivityManager != null
-            ) {
-                val network = connectivityManager.activeNetwork
-                val capabilities = connectivityManager.getNetworkCapabilities(network)
-                (capabilities != null) && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            return connectivityManager?.run {
+                val network = activeNetwork
+                val capabilities = getNetworkCapabilities(network)
+                capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                         capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
-            } else {
-                false
+            } ?: false
             }
         }
-    }
+
 
 }
 
